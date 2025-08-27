@@ -1,9 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+// This is your entire file – nothing else should remain above
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,6 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ── NextAuth core models -----------------------------
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -40,13 +36,15 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id                     String                  @id @default(cuid())
+  name                   String?
+  email                  String?                 @unique
+  emailVerified          DateTime?
+  image                  String?
+  accounts               Account[]
+  sessions               Session[]
+  bookings               Booking[]
+  volunteerRegistrations VolunteerRegistration[]
 }
 
 model VerificationToken {
@@ -55,4 +53,104 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// ── Accommodation ------------------------------------
+model Accommodation {
+  id               String   @id @default(cuid())
+  name             String
+  location         String
+  description      String
+  energyEfficiency String
+  wasteManagement  String
+  waterConservation String
+  certifications   Json     // e.g. ["LEED Gold", "Green Key"]
+  images           Json     // array of URLs
+  websiteUrl       String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  bookings  Booking[]
+  ecoRating EcoRating[]
+}
+
+// ── Restaurant ---------------------------------------
+model Restaurant {
+  id               String   @id @default(cuid())
+  name             String
+  location         String
+  description      String
+  energyEfficiency String
+  wasteManagement  String
+  waterConservation String
+  certifications   Json
+  images           Json
+  websiteUrl       String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  bookings  Booking[]
+  ecoRating EcoRating[]
+}
+
+// ── ConservationProject ------------------------------
+model ConservationProject {
+  id               String   @id @default(cuid())
+  title            String
+  description      String
+  location         String
+  startDate        DateTime
+  endDate          DateTime
+  maxVolunteers    Int
+  registeredCount  Int      @default(0)
+  pointsAwarded    Int
+  image            String?
+  createdAt        DateTime @default(now())
+
+  registrations VolunteerRegistration[]
+}
+
+// ── EcoRating ----------------------------------------
+model EcoRating {
+  id           String      @id @default(cuid())
+  placeId      String
+  placeType    PlaceType   // ACCOMMODATION or RESTAURANT
+  overallScore Int         @db.SmallInt // 0-100
+  factors      Json        // detailed breakdown
+  createdAt    DateTime    @default(now())
+
+  accommodation Accommodation? @relation(fields: [placeId], references: [id], map: "EcoRating_accommodation_fkey")
+  restaurant    Restaurant?    @relation(fields: [placeId], references: [id], map: "EcoRating_restaurant_fkey")
+
+  @@unique([placeId, placeType])
+}
+
+enum PlaceType {
+  ACCOMMODATION
+  RESTAURANT
+}
+
+// ── Pivot tables -------------------------------------
+model Booking {
+  id        String   @id @default(cuid())
+  userId    String
+  placeId   String
+  placeType PlaceType
+  bookedAt  DateTime @default(now())
+
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accommodation Accommodation?  @relation(fields: [placeId], references: [id], onDelete: Cascade, map: "Booking_accommodation_fkey")
+  restaurant    Restaurant?     @relation(fields: [placeId], references: [id], onDelete: Cascade, map: "Booking_restaurant_fkey")
+}
+
+model VolunteerRegistration {
+  id                     String   @id @default(cuid())
+  userId                 String
+  conservationProjectId  String
+  registeredAt           DateTime @default(now())
+
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conservationProject ConservationProject @relation(fields: [conservationProjectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, conservationProjectId])
 }
