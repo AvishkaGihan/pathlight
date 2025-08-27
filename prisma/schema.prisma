@@ -36,14 +36,14 @@ model Session {
 }
 
 model User {
-  id                     String                  @id @default(cuid())
-  name                   String?
-  email                  String?                 @unique
-  emailVerified          DateTime?
-  image                  String?
-  accounts               Account[]
-  sessions               Session[]
-  bookings               Booking[]
+  id                    String                  @id @default(cuid())
+  name                  String?
+  email                 String?                 @unique
+  emailVerified         DateTime?
+  image                 String?
+  accounts              Account[]
+  sessions              Session[]
+  bookings              Booking[]
   volunteerRegistrations VolunteerRegistration[]
 }
 
@@ -114,13 +114,13 @@ model ConservationProject {
 model EcoRating {
   id           String      @id @default(cuid())
   placeId      String
-  placeType    PlaceType   // ACCOMMODATION or RESTAURANT
-  overallScore Int         @db.SmallInt // 0-100
-  factors      Json        // detailed breakdown
+  placeType    PlaceType
+  overallScore Int
+  factors      Json
   createdAt    DateTime    @default(now())
 
-  accommodation Accommodation? @relation(fields: [placeId], references: [id], map: "EcoRating_accommodation_fkey")
-  restaurant    Restaurant?    @relation(fields: [placeId], references: [id], map: "EcoRating_restaurant_fkey")
+  accommodation Accommodation? @relation(fields: [placeId], references: [id], onDelete: Cascade, map: "EcoRating_acc_fkey")
+  restaurant    Restaurant?    @relation(fields: [placeId], references: [id], onDelete: Cascade, map: "EcoRating_rest_fkey")
 
   @@unique([placeId, placeType])
 }
@@ -139,8 +139,8 @@ model Booking {
   bookedAt  DateTime @default(now())
 
   user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accommodation Accommodation?  @relation(fields: [placeId], references: [id], onDelete: Cascade, map: "Booking_accommodation_fkey")
-  restaurant    Restaurant?     @relation(fields: [placeId], references: [id], onDelete: Cascade, map: "Booking_restaurant_fkey")
+  accommodation Accommodation?  @relation(fields: [placeId], references: [id], onDelete: Cascade, map: "Booking_acc_fkey")
+  restaurant    Restaurant?     @relation(fields: [placeId], references: [id], onDelete: Cascade, map: "Booking_rest_fkey")
 }
 
 model VolunteerRegistration {
