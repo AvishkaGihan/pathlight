@@ -5,7 +5,7 @@ export const bookingSchema = z.object({
   placeType: z.enum(["ACCOMMODATION", "RESTAURANT"]),
   checkIn: z.date(),
   checkOut: z.date().optional(),
-  userEmail: z.string().email(),
+  userEmail: z.email(),
 });
 
 export const volunteerSchema = z.object({
