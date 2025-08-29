@@ -37,9 +37,9 @@ async function main() {
       waterConservation: "Rainwater harvesting and greywater recycling systems",
       certifications: ["LEED Platinum", "Green Globe"],
       images: [
-        "treehouse-exterior.jpg",
-        "treehouse-interior.jpg",
-        "treehouse-view.jpg",
+        "https://images.pexels.com/photos/3018035/pexels-photo-3018035.jpeg",
+        "https://images.pexels.com/photos/5195418/pexels-photo-5195418.jpeg",
+        "https://images.pexels.com/photos/17908301/pexels-photo-17908301.jpeg",
       ],
       websiteUrl: "https://treehouseeco.com",
     },
@@ -53,7 +53,11 @@ async function main() {
       wasteManagement: "Plastic-free zone with organic waste conversion",
       waterConservation: "Seawater desalination and water-efficient fixtures",
       certifications: ["Green Key", "Travelife Gold"],
-      images: ["resort-aerial.jpg", "resort-beach.jpg", "resort-room.jpg"],
+      images: [
+        "https://images.pexels.com/photos/28811767/pexels-photo-28811767.jpeg",
+        "https://images.pexels.com/photos/10929911/pexels-photo-10929911.jpeg",
+        "https://images.pexels.com/photos/27599599/pexels-photo-27599599.jpeg",
+      ],
       websiteUrl: "https://coastalecoresort.com",
     },
     {
@@ -65,7 +69,11 @@ async function main() {
       wasteManagement: "Comprehensive recycling and composting program",
       waterConservation: "Spring water sourcing with usage monitoring",
       certifications: ["EarthCheck", "Sustainable Tourism Certified"],
-      images: ["cabin-exterior.jpg", "cabin-interior.jpg", "mountain-view.jpg"],
+      images: [
+        "https://images.pexels.com/photos/32853016/pexels-photo-32853016.jpeg",
+        "https://images.pexels.com/photos/17700800/pexels-photo-17700800.jpeg",
+        "https://images.pexels.com/photos/13314120/pexels-photo-13314120.jpeg",
+      ],
       websiteUrl: "https://mountainviewcabins.com",
     },
     {
@@ -81,9 +89,9 @@ async function main() {
         "Sustainable Travel International",
       ],
       images: [
-        "glamping-tent.jpg",
-        "riverside-view.jpg",
-        "camping-interior.jpg",
+        "https://images.pexels.com/photos/4149261/pexels-photo-4149261.jpeg",
+        "https://images.pexels.com/photos/4149273/pexels-photo-4149273.jpeg",
+        "https://images.pexels.com/photos/31479791/pexels-photo-31479791.jpeg",
       ],
       websiteUrl: "https://riversideglamping.com",
     },
@@ -101,9 +109,9 @@ async function main() {
         "Sri Lanka Tourism Eco Certification",
       ],
       images: [
-        "canopy-lodge.jpg",
-        "rainforest-view.jpg",
-        "observation-deck.jpg",
+        "https://images.pexels.com/photos/32274841/pexels-photo-32274841.jpeg",
+        "https://images.pexels.com/photos/32290602/pexels-photo-32290602.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
       ],
       websiteUrl: "https://forestcanopylodge.com",
     },
@@ -122,9 +130,9 @@ async function main() {
       waterConservation: "Water-efficient dishwashing and garden irrigation",
       certifications: ["Organic Certified", "Zero Waste International"],
       images: [
-        "restaurant-interior.jpg",
-        "garden-view.jpg",
-        "food-plating.jpg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
       ],
       websiteUrl: "https://farmtotable.lk",
     },
@@ -137,7 +145,11 @@ async function main() {
       wasteManagement: "Seafood waste composting and plastic-free policy",
       waterConservation: "Rainwater collection for cleaning purposes",
       certifications: ["MSC Certified", "Friend of the Sea"],
-      images: ["ocean-view.jpg", "seafood-display.jpg", "restaurant-deck.jpg"],
+      images: [
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+      ],
       websiteUrl: "https://oceanharvest.lk",
     },
     {
@@ -152,7 +164,11 @@ async function main() {
         "Organic Sri Lanka",
         "Sustainable Restaurant Association",
       ],
-      images: ["spice-garden.jpg", "restaurant-view.jpg", "cooking-demo.jpg"],
+      images: [
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+      ],
       websiteUrl: "https://greenspicegarden.com",
     },
     {
@@ -164,7 +180,11 @@ async function main() {
       wasteManagement: "Coffee grounds recycling program",
       waterConservation: "Water recycling for plantation irrigation",
       certifications: ["Rainforest Alliance", "Organic Certified"],
-      images: ["cafe-interior.jpg", "tea-plantation.jpg", "coffee-service.jpg"],
+      images: [
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+      ],
       websiteUrl: "https://highlandorganic.lk",
     },
     {
@@ -177,9 +197,9 @@ async function main() {
       waterConservation: "Traditional water conservation methods",
       certifications: ["Slow Food Certified", "Indigenous Food Lab"],
       images: [
-        "traditional-kitchen.jpg",
-        "dining-area.jpg",
-        "local-ingredients.jpg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
+        "https://images.pexels.com/photos/5620427/pexels-photo-5620427.jpeg",
       ],
       websiteUrl: "https://nativekitchen.lk",
     },
@@ -196,7 +216,8 @@ async function main() {
       endDate: new Date("2025-12-31"),
       maxVolunteers: 20,
       pointsAwarded: 100,
-      image: "turtle-conservation.jpg",
+      image:
+        "https://www.pexels.com/photo/close-up-photo-of-sea-turtle-2570524/",
     },
     {
       title: "Rainforest Restoration Project",
@@ -207,7 +228,8 @@ async function main() {
       endDate: new Date("2026-03-31"),
       maxVolunteers: 30,
       pointsAwarded: 150,
-      image: "rainforest-restoration.jpg",
+      image:
+        "https://www.pexels.com/photo/close-up-photo-of-sea-turtle-2570524/",
     },
     {
       title: "Coral Reef Recovery Initiative",
@@ -218,7 +240,8 @@ async function main() {
       endDate: new Date("2026-02-28"),
       maxVolunteers: 15,
       pointsAwarded: 120,
-      image: "coral-restoration.jpg",
+      image:
+        "https://www.pexels.com/photo/close-up-photo-of-sea-turtle-2570524/",
     },
   ];
 
