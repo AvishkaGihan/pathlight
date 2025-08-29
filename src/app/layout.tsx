@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/Header";
 import Provider from "@/components/SessionProvider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,6 +28,7 @@ export default function RootLayout({
             >
               <Header />
               <main className="container mx-auto px-4 py-4">{children}</main>
+              <Toaster />
             </ThemeProvider>
           </Provider>
         </body>
