@@ -24,7 +24,9 @@ export default function Header() {
             Conservation
           </Link>
           {session ? (
-            <Button variant="outline">Signed in</Button>
+            <Link href="/profile" className="text-sm">
+              Profile
+            </Link>
           ) : (
             <Button onClick={() => signIn("github")}>Sign In</Button>
           )}

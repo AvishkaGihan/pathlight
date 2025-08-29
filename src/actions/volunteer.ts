@@ -18,6 +18,20 @@ export async function signupVolunteer(prevState: any, formData: FormData) {
   });
   if (!user) return { error: "User not found" };
 
+  // Check if user has already volunteered for this project
+  const existingRegistration = await db.volunteerRegistration.findUnique({
+    where: {
+      userId_conservationProjectId: {
+        userId: user.id,
+        conservationProjectId: parsed.data.projectId,
+      },
+    },
+  });
+
+  if (existingRegistration) {
+    return { error: "You have already volunteered for this project" };
+  }
+
   await db.$transaction([
     db.volunteerRegistration.create({
       data: { userId: user.id, conservationProjectId: parsed.data.projectId },

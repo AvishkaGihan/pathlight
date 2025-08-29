@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { calculateEcoScore } from "@/lib/eco-score";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 export const colorMap = {
   red: "destructive",
@@ -38,17 +39,19 @@ const PlacesPage = async () => {
   return (
     <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {enriched.map((p) => (
-        <Card key={p.id}>
-          <CardHeader>
-            <CardTitle>{p.name}</CardTitle>
-            <Badge variant={colorMap[p.color as keyof typeof colorMap]}>
-              {p.overallScore}
-            </Badge>
-          </CardHeader>
-          <CardContent>
-            <p>{p.location}</p>
-          </CardContent>
-        </Card>
+        <Link key={p.id} href={`/places/${p.id}`}>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle>{p.name}</CardTitle>
+              <Badge variant={colorMap[p.color as keyof typeof colorMap]}>
+                {p.overallScore}
+              </Badge>
+            </CardHeader>
+            <CardContent>
+              <p>{p.location}</p>
+            </CardContent>
+          </Card>
+        </Link>
       ))}
     </section>
   );

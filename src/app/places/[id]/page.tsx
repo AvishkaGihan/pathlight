@@ -47,7 +47,9 @@ export default async function PlacePage({
         {images.map((src, i) => (
           <div key={i} className="relative w-96 h-64">
             <Image
-              src={src}
+              src={
+                src.startsWith("/") || src.startsWith("http") ? src : `/${src}`
+              }
               alt={`img-${i}`}
               fill
               className="object-cover rounded"
