@@ -2,13 +2,26 @@ import { PrismaClient, PlaceType } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  // Clear existing data
+  // Clear existing data - Delete entire database content
+  console.log("🗑️  Clearing all existing data...");
+
+  // Delete in order to respect foreign key constraints
   await prisma.booking.deleteMany();
   await prisma.ecoRating.deleteMany();
   await prisma.volunteerRegistration.deleteMany();
+  await prisma.conservationProject.deleteMany();
   await prisma.accommodation.deleteMany();
   await prisma.restaurant.deleteMany();
-  await prisma.conservationProject.deleteMany();
+
+  // Delete NextAuth related data
+  await prisma.session.deleteMany();
+  await prisma.account.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.verificationToken.deleteMany();
+
+  console.log("✅ Database cleared successfully!");
+
+  console.log("🌱 Starting database seeding...");
 
   // Create Accommodations
   const accommodations = [
@@ -228,7 +241,7 @@ async function main() {
     });
   }
 
-  console.log("Seed data inserted successfully!");
+  console.log("🎉 Seed data inserted successfully! Database is now ready.");
 }
 
 main()
