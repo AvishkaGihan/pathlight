@@ -49,4 +49,11 @@ export const careerAPI = {
     api.get(`/careers/${careerId}/detailed-roadmap`),
 };
 
+export const roadmapAPI = {
+  create: (title, content) => api.post("/roadmaps", { title, content }),
+  getAll: () => api.get("/roadmaps"),
+  get: (id) => api.get(`/roadmaps/${id}`),
+  delete: (id) => api.delete(`/roadmaps/${id}`),
+};
+
 export default api;

@@ -11,6 +11,7 @@ import authRoutes from "./routes/auth.js";
 import quizRoutes from "./routes/quiz.js";
 import reportRoutes from "./routes/report.js";
 import careerRoutes from "./routes/career.js";
+import roadmapRoutes from "./routes/roadmap.js";
 import configurePassport from "./config/passport.js";
 
 configurePassport();
@@ -31,6 +32,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/quiz", quizRoutes);
 app.use("/api/v1/report", reportRoutes);
 app.use("/api/v1/careers", careerRoutes);
+app.use("/api/v1/roadmaps", roadmapRoutes);
 
 // Health check endpoint
 app.get("/api/v1/health", (req, res) => {

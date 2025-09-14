@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { careerAPI } from "../services/api";
+import { careerAPI, roadmapAPI } from "../services/api";
 import {
   ArrowLeft,
   BookOpen,
@@ -19,6 +19,9 @@ const Roadmap = () => {
   const [loading, setLoading] = useState(true);
   const [detailedLoading, setDetailedLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(null);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   const fetchDetailedRoadmap = async () => {
     if (!career || career.detailedRoadmap) return;
@@ -37,6 +40,31 @@ const Roadmap = () => {
       setError("Failed to generate detailed roadmap. Please try again.");
     } finally {
       setDetailedLoading(false);
+    }
+  };
+
+  const saveRoadmap = async () => {
+    if (!career || !career.detailedRoadmap) return;
+
+    setSaving(true);
+    setSaveError(null);
+    setSaveSuccess(false);
+
+    try {
+      const title = `${career.title} Learning Roadmap`;
+      const content = JSON.stringify(career.detailedRoadmap);
+
+      const response = await roadmapAPI.create(title, content);
+      if (response.data.success) {
+        setSaveSuccess(true);
+        // Hide success message after 3 seconds
+        setTimeout(() => setSaveSuccess(false), 3000);
+      }
+    } catch (error) {
+      console.error("Error saving roadmap:", error);
+      setSaveError("Failed to save roadmap. Please try again.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -398,23 +426,56 @@ const Roadmap = () => {
                 ? "Detailed Learning Roadmap"
                 : "Learning Path"}
             </h2>
-            {!career.detailedRoadmap && (
-              <button
-                onClick={fetchDetailedRoadmap}
-                disabled={detailedLoading}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
-              >
-                {detailedLoading && (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                )}
-                <span>
-                  {detailedLoading
-                    ? "Generating..."
-                    : "Get AI-Powered Detailed Roadmap"}
-                </span>
-              </button>
-            )}
+            <div className="flex items-center space-x-3">
+              {career.detailedRoadmap && (
+                <button
+                  onClick={saveRoadmap}
+                  disabled={saving}
+                  className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                >
+                  {saving && (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  )}
+                  <span>{saving ? "Saving..." : "Save Roadmap"}</span>
+                </button>
+              )}
+              {!career.detailedRoadmap && (
+                <button
+                  onClick={fetchDetailedRoadmap}
+                  disabled={detailedLoading}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                >
+                  {detailedLoading && (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  )}
+                  <span>
+                    {detailedLoading
+                      ? "Generating..."
+                      : "Get AI-Powered Detailed Roadmap"}
+                  </span>
+                </button>
+              )}
+            </div>
           </div>
+
+          {saveSuccess && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                <span className="text-green-800">
+                  Roadmap saved successfully!
+                </span>
+              </div>
+            </div>
+          )}
+
+          {saveError && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+              <div className="flex items-center space-x-2">
+                <span className="text-red-800">{saveError}</span>
+              </div>
+            </div>
+          )}
 
           {career.detailedRoadmap
             ? renderDetailedRoadmap()

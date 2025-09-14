@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Quiz from "./pages/Quiz";
 import Results from "./pages/Results";
 import Roadmap from "./pages/Roadmap";
+import SavedRoadmaps from "./pages/SavedRoadmaps";
 
 function App() {
   return (
@@ -46,6 +47,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Roadmap />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/saved-roadmaps"
+              element={
+                <ProtectedRoute>
+                  <SavedRoadmaps />
                 </ProtectedRoute>
               }
             />
