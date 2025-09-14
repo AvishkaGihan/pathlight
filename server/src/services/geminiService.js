@@ -1,12 +1,29 @@
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const envPath = path.resolve(__dirname, "../../.env");
+
+dotenv.config({ path: envPath });
+
 import { GoogleGenAI } from "@google/genai";
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
+
+const ai = process.env.GEMINI_API_KEY
+  ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+  : null;
 
 export const getEnhancedCareersFromGemini = async (
   bigFiveScores,
   initialCareers
 ) => {
+  if (!ai) {
+    throw new Error(
+      "Gemini API is not configured - GEMINI_API_KEY environment variable is missing"
+    );
+  }
+
   try {
     const prompt = `
 You are an expert career counselor. Analyze this personality profile and suggest the most suitable careers.
@@ -28,7 +45,7 @@ Please provide:
 Return ONLY valid JSON in this exact format:
 [
   {
-    "careerId": "object_id_string",
+    "title": "career_title_string",
     "reason": "Explanation text",
     "skillGaps": ["Skill 1", "Skill 2", "Skill 3"]
   }
@@ -38,6 +55,7 @@ Return ONLY valid JSON in this exact format:
       model: "gemini-2.5-flash",
       contents: prompt,
     });
+    console.log("Gemini Response:", response);
     const responseText = response.text;
 
     // Extract JSON from the response

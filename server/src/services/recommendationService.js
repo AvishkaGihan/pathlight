@@ -58,6 +58,23 @@ export const generateCareerRecommendations = async (quizAnswers, userId) => {
       aiServiceUsed = false;
     }
 
+    // If AI was used, map career titles back to ObjectIds
+    if (aiServiceUsed) {
+      const careerMap = new Map(initialCareers.map((c) => [c.title, c._id]));
+      finalizedCareers = finalizedCareers
+        .map((rec) => {
+          const careerId = careerMap.get(rec.title);
+          if (!careerId) {
+            console.warn(
+              `Career "${rec.title}" not found in initial careers, skipping`
+            );
+            return null;
+          }
+          return { ...rec, careerId, title: undefined }; // remove title, keep careerId
+        })
+        .filter(Boolean);
+    }
+
     return {
       bigFiveScores,
       hollandCodes,

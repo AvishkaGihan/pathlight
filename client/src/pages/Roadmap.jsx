@@ -114,20 +114,22 @@ const Roadmap = () => {
             <p className="text-gray-600">{career.description}</p>
           </div>
 
-          {career.averageSalary && (
-            <div className="bg-blue-50 rounded-lg p-4 mt-4 md:mt-0">
-              <div className="flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-blue-500" />
-                <span className="text-sm font-medium text-blue-700">
-                  Average Salary
-                </span>
+          {career.averageSalary &&
+            career.averageSalary.min &&
+            career.averageSalary.max && (
+              <div className="bg-blue-50 rounded-lg p-4 mt-4 md:mt-0">
+                <div className="flex items-center space-x-2">
+                  <Clock className="w-4 h-4 text-blue-500" />
+                  <span className="text-sm font-medium text-blue-700">
+                    Average Salary
+                  </span>
+                </div>
+                <p className="text-lg font-semibold text-blue-900">
+                  ${career.averageSalary.min.toLocaleString()} - $
+                  {career.averageSalary.max.toLocaleString()}
+                </p>
               </div>
-              <p className="text-lg font-semibold text-blue-900">
-                ${career.averageSalary.min.toLocaleString()} - $
-                {career.averageSalary.max.toLocaleString()}
-              </p>
-            </div>
-          )}
+            )}
         </div>
 
         <div className="prose max-w-none">
