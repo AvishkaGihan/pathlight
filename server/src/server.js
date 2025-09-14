@@ -1,17 +1,18 @@
 import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import cors from "cors";
 import passport from "passport";
 import connectDB from "./config/database.js";
-import "./config/passport.js";
 
 // Import routes
 import authRoutes from "./routes/auth.js";
 import quizRoutes from "./routes/quiz.js";
 import reportRoutes from "./routes/report.js";
 import careerRoutes from "./routes/career.js";
+import configurePassport from "./config/passport.js";
 
-dotenv.config();
+configurePassport();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -46,7 +47,7 @@ app.use((err, req, res, next) => {
 });
 
 // 404 handler
-app.use("*", (req, res) => {
+app.use((req, res) => {
   res.status(404).json({
     success: false,
     message: "API endpoint not found",
