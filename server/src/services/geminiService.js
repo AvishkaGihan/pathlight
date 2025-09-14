@@ -7,24 +7,31 @@ export const getEnhancedCareersFromGemini = async (
 ) => {
   try {
     const prompt = `
-Act as a career counselor. Analyze the following personality profile and initial career list.
+You are an expert career counselor. Analyze this personality profile and suggest the most suitable careers.
 
-Personality Scores (0-1): ${JSON.stringify(bigFiveScores)}
+Big Five Personality Scores (0-1 scale):
+- Openness: ${bigFiveScores.openness.toFixed(2)}
+- Conscientiousness: ${bigFiveScores.conscientiousness.toFixed(2)}
+- Extraversion: ${bigFiveScores.extraversion.toFixed(2)}
+- Agreeableness: ${bigFiveScores.agreeableness.toFixed(2)}
+- Neuroticism: ${bigFiveScores.neuroticism.toFixed(2)}
 
-Initial Career Suggestions: ${initialCareers.map((c) => c.title).join(", ")}
+Potential career matches: ${initialCareers.map((c) => c.title).join(", ")}
 
-Your task:
-1. Refine and prioritize the list to 3-5 most suitable careers.
-2. For each final career, suggest 2-3 critical skill gaps the user might need to address.
+Please provide:
+1. 3-5 most suitable careers from the list (prioritize best matches)
+2. For each career, a brief explanation of why it suits this personality
+3. 2-3 key skill gaps the person might need to address
 
-Return a valid JSON array of objects with this exact structure:
-[{
-  "careerId": "Career Name",
-  "reason": "Brief reason for suitability based on personality",
-  "skillGaps": ["Skill 1", "Skill 2"]
-}]
-    `;
-
+Return ONLY valid JSON in this exact format:
+[
+  {
+    "careerId": "object_id_string",
+    "reason": "Explanation text",
+    "skillGaps": ["Skill 1", "Skill 2", "Skill 3"]
+  }
+]
+`;
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: prompt,
