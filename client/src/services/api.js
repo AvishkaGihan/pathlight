@@ -45,6 +45,8 @@ export const reportAPI = {
 
 export const careerAPI = {
   getRoadmap: (careerId) => api.get(`/careers/${careerId}/roadmap`),
+  getDetailedRoadmap: (careerId) =>
+    api.get(`/careers/${careerId}/detailed-roadmap`),
 };
 
 export default api;

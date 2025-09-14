@@ -1,13 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { careerAPI } from "../services/api";
-import { ArrowLeft, BookOpen, Target, Clock, TrendingUp } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  Target,
+  Clock,
+  TrendingUp,
+  CheckCircle,
+  Calendar,
+  Award,
+  ExternalLink,
+} from "lucide-react";
 
 const Roadmap = () => {
   const { careerId } = useParams();
   const [career, setCareer] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [detailedLoading, setDetailedLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const fetchDetailedRoadmap = async () => {
+    if (!career || career.detailedRoadmap) return;
+
+    setDetailedLoading(true);
+    try {
+      const response = await careerAPI.getDetailedRoadmap(careerId);
+      if (response.data.success) {
+        setCareer((prev) => ({
+          ...prev,
+          detailedRoadmap: response.data.career.detailedRoadmap,
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching detailed roadmap:", error);
+      setError("Failed to generate detailed roadmap. Please try again.");
+    } finally {
+      setDetailedLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchRoadmap = async () => {
@@ -50,7 +81,7 @@ const Roadmap = () => {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="text-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <BookOpen className="w-8 h-8 text-red-500" />
+            <BookOpen className="w-8 h-8 text-red-500" strokeWidth={2} />
           </div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
             Something went wrong
@@ -60,7 +91,7 @@ const Roadmap = () => {
             to="/results"
             className="inline-flex items-center space-x-2 bg-primary-500 text-white px-5 py-2.5 rounded-lg hover:bg-primary-600"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" strokeWidth={2} />
             <span>Back to Results</span>
           </Link>
         </div>
@@ -68,7 +99,7 @@ const Roadmap = () => {
     );
   }
 
-  // Group skills into categories for better organization
+  // Group skills into categories for better organization (fallback for basic roadmap)
   const skillCategories = [
     {
       title: "Fundamentals",
@@ -76,7 +107,7 @@ const Roadmap = () => {
         0,
         Math.ceil(career.coreSkills.length / 3)
       ),
-      icon: <Target className="w-5 h-5 text-blue-500" />,
+      icon: <Target className="w-5 h-5 text-blue-500" strokeWidth={2} />,
     },
     {
       title: "Core Technologies",
@@ -84,16 +115,244 @@ const Roadmap = () => {
         Math.ceil(career.coreSkills.length / 3),
         Math.ceil((career.coreSkills.length * 2) / 3)
       ),
-      icon: <BookOpen className="w-5 h-5 text-green-500" />,
+      icon: <BookOpen className="w-5 h-5 text-green-500" strokeWidth={2} />,
     },
     {
       title: "Advanced Concepts",
       skills: career.coreSkills.slice(
         Math.ceil((career.coreSkills.length * 2) / 3)
       ),
-      icon: <TrendingUp className="w-5 h-5 text-purple-500" />,
+      icon: <TrendingUp className="w-5 h-5 text-purple-500" strokeWidth={2} />,
     },
   ];
+
+  const getDifficultyColor = (difficulty) => {
+    switch (difficulty?.toLowerCase()) {
+      case "beginner":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "intermediate":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "advanced":
+        return "bg-red-100 text-red-800 border-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
+
+  const renderDetailedRoadmap = () => {
+    if (!career.detailedRoadmap) return null;
+
+    return (
+      <div className="space-y-8">
+        {/* Summary Section */}
+        {career.detailedRoadmap.totalDuration && (
+          <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+            <div className="flex items-center space-x-3 mb-4">
+              <Calendar className="w-6 h-6 text-blue-600" strokeWidth={2} />
+              <h3 className="text-lg font-semibold text-blue-900">
+                Learning Timeline
+              </h3>
+            </div>
+            <p className="text-blue-700 text-lg">
+              <strong>Total Duration:</strong>{" "}
+              {career.detailedRoadmap.totalDuration}
+            </p>
+          </div>
+        )}
+
+        {/* Key Milestones */}
+        {career.detailedRoadmap.keyMilestones &&
+          career.detailedRoadmap.keyMilestones.length > 0 && (
+            <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
+              <div className="flex items-center space-x-3 mb-4">
+                <Award className="w-6 h-6 text-purple-600" strokeWidth={2} />
+                <h3 className="text-lg font-semibold text-purple-900">
+                  Key Milestones
+                </h3>
+              </div>
+              <div className="space-y-2">
+                {career.detailedRoadmap.keyMilestones.map(
+                  (milestone, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <div className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                        {milestone.atPhase}
+                      </div>
+                      <span className="text-purple-700">
+                        {milestone.milestone}
+                      </span>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          )}
+
+        {/* Learning Phases */}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Learning Path
+          </h2>
+
+          {career.detailedRoadmap.phases.map((phase, phaseIndex) => (
+            <div
+              key={phaseIndex}
+              className="border border-gray-200 rounded-xl overflow-hidden"
+            >
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold mb-2">
+                      {phase.title.toLowerCase().includes("phase")
+                        ? phase.title
+                        : `Phase ${phaseIndex + 1}: ${phase.title}`}
+                    </h3>
+                    <p className="text-blue-100 mb-2">{phase.objective}</p>
+                    {phase.duration && (
+                      <div className="flex items-center space-x-2">
+                        <Clock className="w-4 h-4" strokeWidth={2} />
+                        <span className="text-sm">{phase.duration}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <div className="bg-black bg-opacity-30 rounded-lg px-3 py-1">
+                      <span className="text-sm font-medium text-white">
+                        {phase.steps.length} steps
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 space-y-4">
+                {phase.steps.map((step, stepIndex) => (
+                  <div
+                    key={stepIndex}
+                    className="border border-gray-100 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-start space-x-4">
+                      <div className="flex-shrink-0">
+                        <div className="w-8 h-8 bg-blue-100 border border-blue-200 rounded-full flex items-center justify-center">
+                          <span className="text-sm font-medium text-blue-700">
+                            {stepIndex + 1}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <h4 className="text-lg font-semibold text-gray-900">
+                            {step.title}
+                          </h4>
+                          <div className="flex items-center space-x-2">
+                            {step.estimatedTime && (
+                              <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                {step.estimatedTime}
+                              </span>
+                            )}
+                            {step.difficulty && (
+                              <span
+                                className={`text-xs font-medium px-2 py-1 rounded border ${getDifficultyColor(
+                                  step.difficulty
+                                )}`}
+                              >
+                                {step.difficulty}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <p className="text-gray-600 mb-3">{step.description}</p>
+
+                        {step.prerequisites &&
+                          step.prerequisites.length > 0 && (
+                            <div className="mb-3">
+                              <h5 className="text-sm font-medium text-gray-700 mb-1">
+                                Prerequisites:
+                              </h5>
+                              <ul className="text-sm text-gray-600 list-disc list-inside">
+                                {step.prerequisites.map(
+                                  (prereq, prereqIndex) => (
+                                    <li key={prereqIndex}>{prereq}</li>
+                                  )
+                                )}
+                              </ul>
+                            </div>
+                          )}
+
+                        {step.resources && step.resources.length > 0 && (
+                          <div>
+                            <h5 className="text-sm font-medium text-gray-700 mb-2">
+                              Recommended Resources:
+                            </h5>
+                            <div className="flex flex-wrap gap-2">
+                              {step.resources.map((resource, resourceIndex) => (
+                                <a
+                                  key={resourceIndex}
+                                  href={
+                                    resource.url ||
+                                    `https://www.google.com/search?q=${encodeURIComponent(
+                                      resource.title || resource
+                                    )}`
+                                  }
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center space-x-1 text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full border border-green-200 hover:bg-green-100 transition-colors"
+                                >
+                                  <ExternalLink
+                                    className="w-3 h-3"
+                                    strokeWidth={2}
+                                  />
+                                  <span>{resource.title || resource}</span>
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderBasicRoadmap = () => {
+    return (
+      <div className="space-y-8">
+        {skillCategories.map((category, index) => (
+          <div key={index} className="border-l-4 border-gray-200 pl-6">
+            <div className="flex items-center space-x-2 mb-4">
+              {category.icon}
+              <h3 className="text-lg font-medium text-gray-900">
+                {category.title}
+              </h3>
+            </div>
+
+            <div className="grid gap-3">
+              {category.skills.map((skill, skillIndex) => (
+                <div
+                  key={skillIndex}
+                  className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg"
+                >
+                  <div className="w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs font-medium text-gray-600">
+                      {skillIndex + 1}
+                    </span>
+                  </div>
+                  <span className="text-gray-700">{skill}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -101,7 +360,7 @@ const Roadmap = () => {
         to="/results"
         className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-800 mb-6"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="w-4 h-4" strokeWidth={2} />
         <span>Back to Results</span>
       </Link>
 
@@ -119,7 +378,7 @@ const Roadmap = () => {
             career.averageSalary.max && (
               <div className="bg-blue-50 rounded-lg p-4 mt-4 md:mt-0">
                 <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4 text-blue-500" />
+                  <Clock className="w-4 h-4 text-blue-500" strokeWidth={2} />
                   <span className="text-sm font-medium text-blue-700">
                     Average Salary
                   </span>
@@ -133,59 +392,33 @@ const Roadmap = () => {
         </div>
 
         <div className="prose max-w-none">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
-            Learning Path
-          </h2>
-
-          <div className="space-y-8">
-            {skillCategories.map((category, index) => (
-              <div key={index} className="border-l-4 border-gray-200 pl-6">
-                <div className="flex items-center space-x-2 mb-4">
-                  {category.icon}
-                  <h3 className="text-lg font-medium text-gray-900">
-                    {category.title}
-                  </h3>
-                </div>
-
-                <div className="grid gap-3">
-                  {category.skills.map((skill, skillIndex) => (
-                    <div
-                      key={skillIndex}
-                      className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg"
-                    >
-                      <div className="w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs font-medium text-gray-600">
-                          {skillIndex + 1}
-                        </span>
-                      </div>
-                      <span className="text-gray-700">{skill}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-gray-900">
+              {career.detailedRoadmap
+                ? "Detailed Learning Roadmap"
+                : "Learning Path"}
+            </h2>
+            {!career.detailedRoadmap && (
+              <button
+                onClick={fetchDetailedRoadmap}
+                disabled={detailedLoading}
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              >
+                {detailedLoading && (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                )}
+                <span>
+                  {detailedLoading
+                    ? "Generating..."
+                    : "Get AI-Powered Detailed Roadmap"}
+                </span>
+              </button>
+            )}
           </div>
-        </div>
-      </div>
 
-      <div className="bg-blue-50 rounded-2xl p-6 border border-blue-200">
-        <h3 className="text-lg font-semibold text-blue-900 mb-3">
-          Ready to get started?
-        </h3>
-        <p className="text-blue-700 mb-4">
-          Begin with the fundamentals and work your way through each category.
-          Consistent practice is key to mastering these skills.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600">
-            Find Online Courses
-          </button>
-          <button className="bg-white text-blue-500 border border-blue-500 px-4 py-2 rounded-lg text-sm hover:bg-blue-50">
-            Explore Learning Resources
-          </button>
-          <button className="bg-white text-blue-500 border border-blue-500 px-4 py-2 rounded-lg text-sm hover:bg-blue-50">
-            Join Community
-          </button>
+          {career.detailedRoadmap
+            ? renderDetailedRoadmap()
+            : renderBasicRoadmap()}
         </div>
       </div>
     </div>
