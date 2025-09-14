@@ -14,6 +14,7 @@ import {
   TrendingUp,
   CheckCircle,
   Award,
+  Download,
 } from "lucide-react";
 
 const SavedRoadmaps = () => {
@@ -22,6 +23,7 @@ const SavedRoadmaps = () => {
   const [error, setError] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [viewingRoadmap, setViewingRoadmap] = useState(null);
+  const [downloadingId, setDownloadingId] = useState(null);
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty?.toLowerCase()) {
@@ -78,6 +80,39 @@ const SavedRoadmaps = () => {
 
   const closeView = () => {
     setViewingRoadmap(null);
+  };
+
+  const downloadRoadmapPDF = async (roadmapId, roadmapTitle) => {
+    setDownloadingId(roadmapId);
+    try {
+      const response = await fetch(`/api/v1/roadmaps/${roadmapId}/pdf`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to download PDF");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${roadmapTitle
+        .replace(/[^a-z0-9]/gi, "_")
+        .toLowerCase()}_roadmap.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      setError("Failed to download PDF. Please try again.");
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   const formatDate = (dateString) => {
@@ -329,6 +364,20 @@ const SavedRoadmaps = () => {
                   >
                     <Eye className="w-4 h-4" />
                     <span>View</span>
+                  </button>
+                  <button
+                    onClick={() =>
+                      downloadRoadmapPDF(roadmap.id, roadmap.title)
+                    }
+                    disabled={downloadingId === roadmap.id}
+                    className="inline-flex items-center space-x-2 bg-green-500 text-white px-3 py-1.5 rounded text-sm hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {downloadingId === roadmap.id ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <Download className="w-4 h-4" />
+                    )}
+                    <span>Download PDF</span>
                   </button>
                   <button
                     onClick={() => deleteRoadmap(roadmap.id)}

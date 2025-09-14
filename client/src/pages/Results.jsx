@@ -215,13 +215,6 @@ const Results = () => {
           ))}
         </div>
       </div>
-
-      <div className="mt-8 flex justify-center">
-        <button className="flex items-center space-x-2 bg-gray-100 text-gray-700 px-5 py-2.5 rounded-lg hover:bg-gray-200">
-          <Download className="w-4 h-4" />
-          <span>Download PDF Report</span>
-        </button>
-      </div>
     </div>
   );
 };

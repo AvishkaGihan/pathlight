@@ -22,6 +22,7 @@ const Roadmap = () => {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const fetchDetailedRoadmap = async () => {
     if (!career || career.detailedRoadmap) return;
@@ -65,6 +66,51 @@ const Roadmap = () => {
       setSaveError("Failed to save roadmap. Please try again.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const downloadRoadmapPDF = async () => {
+    if (!career || !career.detailedRoadmap) return;
+
+    setDownloading(true);
+    try {
+      // First save the roadmap
+      const title = `${career.title} Learning Roadmap`;
+      const content = JSON.stringify(career.detailedRoadmap);
+
+      const saveResponse = await roadmapAPI.create(title, content);
+      if (saveResponse.data.success) {
+        const roadmapId = saveResponse.data.roadmap.id;
+
+        // Then download the PDF
+        const response = await fetch(`/api/v1/roadmaps/${roadmapId}/pdf`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to download PDF");
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${title
+          .replace(/[^a-z0-9]/gi, "_")
+          .toLowerCase()}_roadmap.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      setSaveError("Failed to download PDF. Please try again.");
+    } finally {
+      setDownloading(false);
     }
   };
 
@@ -428,16 +474,30 @@ const Roadmap = () => {
             </h2>
             <div className="flex items-center space-x-3">
               {career.detailedRoadmap && (
-                <button
-                  onClick={saveRoadmap}
-                  disabled={saving}
-                  className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
-                >
-                  {saving && (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  )}
-                  <span>{saving ? "Saving..." : "Save Roadmap"}</span>
-                </button>
+                <>
+                  <button
+                    onClick={saveRoadmap}
+                    disabled={saving}
+                    className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                  >
+                    {saving && (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    )}
+                    <span>{saving ? "Saving..." : "Save Roadmap"}</span>
+                  </button>
+                  <button
+                    onClick={downloadRoadmapPDF}
+                    disabled={downloading}
+                    className="bg-purple-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                  >
+                    {downloading && (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    )}
+                    <span>
+                      {downloading ? "Downloading..." : "Download PDF"}
+                    </span>
+                  </button>
+                </>
               )}
               {!career.detailedRoadmap && (
                 <button
