@@ -10,15 +10,18 @@ export const handleGoogleCallback = async (req, res) => {
     // Generate JWT token
     const token = generateToken(req.user._id);
 
-    res.json({
-      success: true,
-      token,
-      user: {
-        userId: req.user._id,
-        email: req.user.email,
-        displayName: req.user.displayName,
-      },
-    });
+    const userObj = {
+      userId: req.user._id,
+      email: req.user.email,
+      displayName: req.user.displayName,
+    };
+
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const redirectUrl = `${frontendUrl}?token=${token}&user=${encodeURIComponent(
+      JSON.stringify(userObj)
+    )}`;
+
+    res.redirect(redirectUrl);
   } catch (error) {
     res.status(500).json({
       success: false,
