@@ -1,5 +1,5 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+import { GoogleGenAI } from "@google/genai";
+const ai = new GoogleGenAI({});
 
 export const getEnhancedCareersFromGemini = async (
   bigFiveScores,
@@ -25,9 +25,11 @@ Return a valid JSON array of objects with this exact structure:
 }]
     `;
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
+    const responseText = response.text;
 
     // Extract JSON from the response
     const jsonMatch =
