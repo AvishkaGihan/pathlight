@@ -162,7 +162,12 @@ const Quiz = () => {
 
     setIsSubmitting(true);
     try {
-      await quizAPI.submit(answers);
+      // Transform answers to match backend schema
+      const formattedAnswers = answers.map((score, index) => ({
+        questionId: index + 1,
+        score,
+      }));
+      await quizAPI.submit(formattedAnswers);
       navigate("/results");
     } catch (error) {
       console.error("Error submitting quiz:", error);
