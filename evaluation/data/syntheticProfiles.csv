@@ -1,0 +1,101 @@
+profileId,openness,conscientiousness,extraversion,agreeableness,neuroticism,idealCareer
+1,0.85,0.72,0.35,0.68,0.28,Data Analyst
+2,0.92,0.45,0.89,0.75,0.15,Marketing Manager
+3,0.67,0.88,0.42,0.91,0.22,Teacher
+4,0.78,0.94,0.38,0.85,0.18,Software Engineer
+5,0.55,0.63,0.95,0.72,0.12,Sales Representative
+6,0.93,0.76,0.88,0.69,0.25,Creative Director
+7,0.42,0.95,0.31,0.88,0.19,Accountant
+8,0.88,0.58,0.92,0.77,0.35,Public Relations Specialist
+9,0.65,0.87,0.45,0.93,0.14,Counselor
+10,0.79,0.69,0.85,0.84,0.28,Project Manager
+11,0.96,0.52,0.78,0.65,0.42,Artist
+12,0.38,0.92,0.25,0.76,0.16,Financial Analyst
+13,0.82,0.71,0.89,0.88,0.23,Human Resources Manager
+14,0.74,0.85,0.42,0.79,0.31,Research Scientist
+15,0.59,0.68,0.94,0.82,0.17,Event Coordinator
+16,0.91,0.77,0.86,0.73,0.29,Business Consultant
+17,0.45,0.89,0.33,0.91,0.21,Quality Assurance Specialist
+18,0.86,0.62,0.91,0.75,0.38,Marketing Coordinator
+19,0.72,0.94,0.39,0.87,0.15,Operations Manager
+20,0.68,0.56,0.97,0.83,0.24,Customer Service Manager
+21,0.94,0.73,0.82,0.71,0.32,UX Designer
+22,0.41,0.96,0.28,0.85,0.18,Database Administrator
+23,0.83,0.69,0.88,0.89,0.26,Social Worker
+24,0.76,0.81,0.47,0.78,0.34,Product Manager
+25,0.62,0.75,0.93,0.86,0.19,Training Coordinator
+26,0.89,0.58,0.85,0.67,0.41,Graphic Designer
+27,0.47,0.93,0.32,0.82,0.22,Systems Analyst
+28,0.84,0.66,0.89,0.91,0.27,Community Outreach Coordinator
+29,0.71,0.88,0.44,0.79,0.16,Technical Writer
+30,0.65,0.74,0.96,0.84,0.33,Sales Manager
+31,0.92,0.79,0.81,0.75,0.25,Content Creator
+32,0.39,0.91,0.29,0.88,0.20,IT Support Specialist
+33,0.87,0.63,0.92,0.76,0.36,Brand Manager
+34,0.73,0.86,0.41,0.93,0.18,School Counselor
+35,0.58,0.72,0.94,0.81,0.29,Event Planner
+36,0.95,0.55,0.87,0.69,0.43,Creative Writer
+37,0.44,0.94,0.26,0.87,0.17,Compliance Officer
+38,0.81,0.68,0.91,0.85,0.31,Client Relations Manager
+39,0.69,0.89,0.46,0.78,0.24,Business Analyst
+40,0.64,0.76,0.95,0.89,0.21,Recruitment Specialist
+41,0.88,0.61,0.84,0.72,0.38,Digital Marketing Specialist
+42,0.43,0.92,0.31,0.91,0.19,Financial Controller
+43,0.85,0.67,0.88,0.83,0.27,Communications Manager
+44,0.77,0.83,0.43,0.86,0.15,Research Analyst
+45,0.61,0.74,0.93,0.79,0.32,Workshop Facilitator
+46,0.93,0.78,0.86,0.74,0.26,Video Producer
+47,0.46,0.95,0.34,0.88,0.23,Risk Analyst
+48,0.82,0.64,0.89,0.92,0.35,Employee Relations Specialist
+49,0.75,0.87,0.42,0.81,0.18,Laboratory Technician
+50,0.67,0.73,0.96,0.85,0.28,Corporate Trainer
+51,0.91,0.56,0.83,0.68,0.41,Web Designer
+52,0.37,0.93,0.27,0.84,0.16,Tax Specialist
+53,0.86,0.71,0.91,0.87,0.34,Public Affairs Coordinator
+54,0.72,0.85,0.44,0.76,0.22,Information Security Analyst
+55,0.59,0.69,0.94,0.93,0.25,Team Leader
+56,0.94,0.74,0.88,0.73,0.39,Fashion Designer
+57,0.42,0.91,0.33,0.89,0.17,Audit Specialist
+58,0.83,0.65,0.87,0.82,0.31,Customer Success Manager
+59,0.78,0.88,0.41,0.95,0.19,Mental Health Counselor
+60,0.63,0.77,0.95,0.78,0.27,Sales Coordinator
+61,0.89,0.59,0.85,0.71,0.37,Game Designer
+62,0.45,0.94,0.29,0.86,0.21,Budget Analyst
+63,0.84,0.68,0.92,0.84,0.33,Media Relations Specialist
+64,0.76,0.82,0.43,0.88,0.14,Environmental Scientist
+65,0.62,0.75,0.93,0.91,0.26,Leadership Development Coordinator
+66,0.96,0.72,0.89,0.67,0.42,Music Producer
+67,0.41,0.89,0.32,0.83,0.18,Investment Analyst
+68,0.87,0.63,0.88,0.79,0.35,Community Manager
+69,0.73,0.86,0.46,0.92,0.23,Academic Advisor
+70,0.66,0.71,0.96,0.85,0.29,Conference Coordinator
+71,0.92,0.77,0.84,0.74,0.31,Product Designer
+72,0.38,0.95,0.28,0.87,0.16,Forensic Accountant
+73,0.85,0.62,0.91,0.88,0.38,Volunteer Coordinator
+74,0.79,0.84,0.44,0.81,0.22,Policy Analyst
+75,0.64,0.73,0.94,0.93,0.24,Diversity and Inclusion Specialist
+76,0.88,0.58,0.86,0.69,0.44,Interior Designer
+77,0.47,0.92,0.35,0.84,0.19,Credit Analyst
+78,0.81,0.67,0.89,0.86,0.32,Partnership Manager
+79,0.75,0.89,0.42,0.78,0.17,Technical Support Specialist
+80,0.68,0.76,0.95,0.82,0.28,Training Manager
+81,0.93,0.74,0.87,0.75,0.36,Animation Designer
+82,0.44,0.93,0.31,0.89,0.21,Operations Analyst
+83,0.86,0.66,0.92,0.91,0.34,Nonprofit Program Coordinator
+84,0.71,0.87,0.45,0.77,0.15,Data Scientist
+85,0.61,0.72,0.93,0.94,0.27,Organizational Development Specialist
+86,0.95,0.79,0.88,0.73,0.33,Film Director
+87,0.43,0.91,0.34,0.85,0.18,Regulatory Affairs Specialist
+88,0.82,0.64,0.87,0.83,0.31,Relationship Manager
+89,0.77,0.85,0.47,0.89,0.24,Health Services Coordinator
+90,0.65,0.74,0.94,0.86,0.26,Territory Manager
+91,0.89,0.57,0.83,0.71,0.39,Multimedia Artist
+92,0.46,0.94,0.36,0.88,0.22,Performance Analyst
+93,0.84,0.69,0.91,0.92,0.35,Advocacy Coordinator
+94,0.78,0.83,0.43,0.79,0.16,Information Systems Manager
+95,0.63,0.75,0.95,0.87,0.29,Professional Development Coordinator
+96,0.91,0.76,0.86,0.74,0.37,Creative Strategist
+97,0.42,0.92,0.33,0.91,0.20,Statistical Analyst
+98,0.85,0.65,0.88,0.84,0.32,Stakeholder Relations Manager
+99,0.74,0.88,0.44,0.96,0.18,Career Counselor
+100,0.67,0.73,0.93,0.81,0.25,Program Manager
