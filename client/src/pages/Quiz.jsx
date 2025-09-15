@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { quizAPI } from "../services/api";
+import Card from "../components/Card";
+import Button from "../components/Button";
 import { ChevronLeft, ChevronRight, HelpCircle } from "lucide-react";
 
 // Sample questions - in a real app, these would come from your backend
@@ -181,97 +183,123 @@ const Quiz = () => {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-gray-700">
-            Question {currentQuestion + 1} of {QUESTIONS.length}
-          </span>
-          <button
-            onClick={() => setShowHelp(!showHelp)}
-            className="text-gray-400 hover:text-gray-600"
-          >
-            <HelpCircle size={18} />
-          </button>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div
-            className="bg-primary-500 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-      </div>
+      {/* Progress Section */}
+      <Card variant="default" className="mb-6">
+        <Card.Content>
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-sm font-medium text-gray-700">
+              Question {currentQuestion + 1} of {QUESTIONS.length}
+            </span>
+            <button
+              onClick={() => setShowHelp(!showHelp)}
+              className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+            >
+              <HelpCircle size={18} />
+            </button>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-3">
+            <div
+              className="bg-gradient-to-r from-primary-500 to-secondary-500 h-3 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+        </Card.Content>
+      </Card>
 
       {/* Help Tooltip */}
       {showHelp && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <h3 className="font-medium text-blue-900 mb-2">How to answer</h3>
-          <p className="text-blue-700 text-sm">
-            Rate how much each statement describes you on a scale from 1
-            (Strongly Disagree) to 5 (Strongly Agree). Be honest - there are no
-            right or wrong answers!
-          </p>
-        </div>
+        <Card
+          variant="outline"
+          className="mb-6 border-primary-200 bg-primary-50"
+        >
+          <Card.Content>
+            <h3 className="font-medium text-primary-900 mb-2">How to answer</h3>
+            <p className="text-primary-700 text-sm leading-relaxed">
+              Rate how much each statement describes you on a scale from 1
+              (Strongly Disagree) to 5 (Strongly Agree). Be honest - there are
+              no right or wrong answers!
+            </p>
+          </Card.Content>
+        </Card>
       )}
 
       {/* Question Card */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm mb-8">
-        <h2 className="text-xl font-medium text-gray-900 mb-6 text-center">
-          {currentQ.text}
-        </h2>
+      <Card variant="elevated" className="mb-8">
+        <Card.Header className="text-center pb-4">
+          <Card.Title className="text-xl text-center leading-relaxed">
+            {currentQ.text}
+          </Card.Title>
+        </Card.Header>
 
-        <div className="grid grid-cols-5 gap-3 mb-8">
-          {[1, 2, 3, 4, 5].map((score) => (
-            <button
-              key={score}
-              onClick={() => handleAnswer(score)}
-              className={`py-3 px-4 rounded-lg border transition-colors ${
-                answers[currentQuestion] === score
-                  ? "bg-primary-500 border-primary-500 text-white"
-                  : "bg-white border-gray-300 text-gray-700 hover:border-primary-300"
-              }`}
-            >
-              {score}
-            </button>
-          ))}
-        </div>
+        <Card.Content>
+          <div className="grid grid-cols-5 gap-4 mb-6">
+            {[1, 2, 3, 4, 5].map((score) => (
+              <button
+                key={score}
+                onClick={() => handleAnswer(score)}
+                className={`py-4 px-4 rounded-xl border-2 transition-all duration-200 font-medium text-lg ${
+                  answers[currentQuestion] === score
+                    ? "bg-primary-500 border-primary-500 text-white shadow-lg scale-105"
+                    : "bg-white border-gray-300 text-gray-700 hover:border-primary-300 hover:bg-primary-50"
+                }`}
+              >
+                {score}
+              </button>
+            ))}
+          </div>
 
-        <div className="flex justify-between items-center text-sm text-gray-500">
-          <span>Strongly Disagree</span>
-          <span>Neutral</span>
-          <span>Strongly Agree</span>
-        </div>
-      </div>
+          <div className="flex justify-between items-center text-sm text-gray-500 px-2">
+            <span className="text-left">
+              Strongly
+              <br />
+              Disagree
+            </span>
+            <span className="text-center">Neutral</span>
+            <span className="text-right">
+              Strongly
+              <br />
+              Agree
+            </span>
+          </div>
+        </Card.Content>
+      </Card>
 
       {/* Navigation */}
-      <div className="flex justify-between">
-        <button
+      <div className="flex justify-between items-center">
+        <Button
           onClick={handlePrevious}
           disabled={currentQuestion === 0}
-          className="flex items-center space-x-2 px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+          variant="outline"
+          size="lg"
+          icon={<ChevronLeft size={16} />}
+          iconPosition="left"
         >
-          <ChevronLeft size={16} />
-          <span>Previous</span>
-        </button>
+          Previous
+        </Button>
 
         {currentQuestion === QUESTIONS.length - 1 ? (
-          <button
+          <Button
             onClick={handleSubmit}
             disabled={isSubmitting || answers[currentQuestion] === null}
-            className="flex items-center space-x-2 bg-primary-500 text-white px-5 py-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-600"
+            loading={isSubmitting}
+            variant="primary"
+            size="lg"
+            icon={<ChevronRight size={16} />}
+            iconPosition="right"
           >
-            <span>{isSubmitting ? "Submitting..." : "Submit Answers"}</span>
-            {!isSubmitting && <ChevronRight size={16} />}
-          </button>
+            {isSubmitting ? "Submitting..." : "Submit Answers"}
+          </Button>
         ) : (
-          <button
+          <Button
             onClick={handleNext}
             disabled={answers[currentQuestion] === null}
-            className="flex items-center space-x-2 bg-primary-500 text-white px-5 py-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-600"
+            variant="primary"
+            size="lg"
+            icon={<ChevronRight size={16} />}
+            iconPosition="right"
           >
-            <span>Next</span>
-            <ChevronRight size={16} />
-          </button>
+            Next
+          </Button>
         )}
       </div>
     </div>

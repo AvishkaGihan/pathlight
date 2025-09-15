@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { roadmapAPI } from "../services/api";
+import Card from "../components/Card";
+import Button from "../components/Button";
 import {
   BookOpen,
   Calendar,
@@ -127,42 +129,50 @@ const SavedRoadmaps = () => {
     if (!roadmapData) return null;
 
     return (
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Summary Section */}
         {roadmapData.totalDuration && (
-          <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <Clock className="w-6 h-6 text-blue-600" />
-              <h3 className="text-lg font-semibold text-blue-900">
-                Learning Timeline
-              </h3>
-            </div>
-            <p className="text-blue-700 text-lg">
-              <strong>Total Duration:</strong> {roadmapData.totalDuration}
-            </p>
-          </div>
+          <Card variant="gradient" className="border-primary-200">
+            <Card.Content>
+              <div className="flex items-center space-x-3 mb-3">
+                <Clock className="w-6 h-6 text-primary-600" strokeWidth={2} />
+                <h3 className="text-lg font-semibold text-primary-900">
+                  Learning Timeline
+                </h3>
+              </div>
+              <p className="text-primary-700 text-lg font-medium">
+                <strong>Total Duration:</strong> {roadmapData.totalDuration}
+              </p>
+            </Card.Content>
+          </Card>
         )}
 
         {/* Key Milestones */}
         {roadmapData.keyMilestones && roadmapData.keyMilestones.length > 0 && (
-          <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <Award className="w-6 h-6 text-purple-600" />
-              <h3 className="text-lg font-semibold text-purple-900">
-                Key Milestones
-              </h3>
-            </div>
-            <div className="space-y-2">
-              {roadmapData.keyMilestones.map((milestone, index) => (
-                <div key={index} className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
-                    {milestone.atPhase}
+          <Card variant="default">
+            <Card.Header>
+              <div className="flex items-center space-x-3">
+                <Award className="w-6 h-6 text-secondary-600" strokeWidth={2} />
+                <Card.Title>Key Milestones</Card.Title>
+              </div>
+            </Card.Header>
+            <Card.Content>
+              <div className="space-y-3">
+                {roadmapData.keyMilestones.map((milestone, index) => (
+                  <div key={index} className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-secondary-100 border border-secondary-200 rounded-full flex items-center justify-center">
+                      <span className="text-sm font-medium text-secondary-700">
+                        {milestone.atPhase}
+                      </span>
+                    </div>
+                    <span className="text-gray-700 font-medium">
+                      {milestone.milestone}
+                    </span>
                   </div>
-                  <span className="text-purple-700">{milestone.milestone}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+                ))}
+              </div>
+            </Card.Content>
+          </Card>
         )}
 
         {/* Learning Phases */}
@@ -172,104 +182,138 @@ const SavedRoadmaps = () => {
           </h2>
           {roadmapData.phases && roadmapData.phases.length > 0 ? (
             roadmapData.phases.map((phase, phaseIndex) => (
-              <div
+              <Card
                 key={phaseIndex}
-                className="border border-gray-200 rounded-xl overflow-hidden"
+                variant="elevated"
+                className="overflow-hidden"
               >
-                <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-primary-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
-                      {phaseIndex + 1}
+                <div className="bg-gradient-to-r from-primary-500 to-secondary-600 text-white p-6 rounded-t-xl">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-medium text-white">
+                          {phaseIndex + 1}
+                        </span>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold">{phase.title}</h3>
+                        <p className="text-primary-100 mt-1">
+                          {phase.duration}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {phase.title}
-                      </h3>
-                      <p className="text-sm text-gray-600">{phase.duration}</p>
+                    <div className="text-right">
+                      <div className="bg-black bg-opacity-30 rounded-lg px-3 py-1 backdrop-blur-sm">
+                        <span className="text-sm font-medium text-white">
+                          {phase.steps?.length || 0} steps
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="p-6">
+
+                <Card.Content className="space-y-4">
                   <div className="mb-4">
-                    <p className="text-gray-700">{phase.objective}</p>
+                    <p className="text-gray-700 text-lg">{phase.objective}</p>
                   </div>
+
                   <div className="space-y-4">
-                    <h4 className="font-medium text-gray-900">
+                    <h4 className="text-lg font-semibold text-gray-900">
                       Learning Steps
                     </h4>
                     {phase.steps && phase.steps.length > 0 ? (
                       phase.steps.map((step, stepIndex) => (
-                        <div
+                        <Card
                           key={stepIndex}
-                          className="border border-gray-200 rounded-lg p-4"
+                          variant="interactive"
+                          className="border-gray-100"
                         >
-                          <div className="flex items-start justify-between mb-2">
-                            <h5 className="font-medium text-gray-900">
-                              {step.title}
-                            </h5>
-                            <span
-                              className={`px-2 py-1 text-xs rounded-full border ${getDifficultyColor(
-                                step.difficulty
-                              )}`}
-                            >
-                              {step.difficulty}
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-700 mb-2">
-                            {step.description}
-                          </p>
-                          <div className="flex items-center space-x-4 text-xs text-gray-500 mb-3">
-                            <span>⏱️ {step.estimatedTime}</span>
-                          </div>
-                          {step.resources && step.resources.length > 0 && (
-                            <div className="mb-3">
-                              <h6 className="text-sm font-medium text-gray-900 mb-1">
-                                Resources:
-                              </h6>
-                              <ul className="space-y-1">
-                                {step.resources.map((resource, resIndex) => (
-                                  <li key={resIndex} className="text-sm">
+                          <Card.Content>
+                            <div className="flex items-start justify-between mb-3">
+                              <h5 className="text-lg font-semibold text-gray-900">
+                                {step.title}
+                              </h5>
+                              <span
+                                className={`px-3 py-1 text-xs rounded-full border font-medium ${getDifficultyColor(
+                                  step.difficulty
+                                )}`}
+                              >
+                                {step.difficulty}
+                              </span>
+                            </div>
+
+                            <p className="text-gray-600 mb-4">
+                              {step.description}
+                            </p>
+
+                            <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
+                              <span className="flex items-center space-x-1">
+                                <Clock className="w-4 h-4" />
+                                <span>{step.estimatedTime}</span>
+                              </span>
+                            </div>
+
+                            {step.resources && step.resources.length > 0 && (
+                              <div className="mb-4">
+                                <h6 className="text-sm font-medium text-gray-700 mb-2">
+                                  Resources:
+                                </h6>
+                                <div className="space-y-2">
+                                  {step.resources.map((resource, resIndex) => (
                                     <a
+                                      key={resIndex}
                                       href={resource.url}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 hover:underline"
+                                      className="inline-flex items-center space-x-2 text-sm bg-secondary-50 text-secondary-700 px-3 py-2 rounded-full border border-secondary-200 hover:bg-secondary-100 transition-colors"
                                     >
-                                      {resource.title}
+                                      <Target className="w-3 h-3" />
+                                      <span>{resource.title}</span>
                                     </a>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                          {step.prerequisites &&
-                            step.prerequisites.length > 0 && (
-                              <div>
-                                <h6 className="text-sm font-medium text-gray-900 mb-1">
-                                  Prerequisites:
-                                </h6>
-                                <ul className="text-sm text-gray-600">
-                                  {step.prerequisites.map(
-                                    (prereq, prereqIndex) => (
-                                      <li key={prereqIndex}>• {prereq}</li>
-                                    )
-                                  )}
-                                </ul>
+                                  ))}
+                                </div>
                               </div>
                             )}
-                        </div>
+
+                            {step.prerequisites &&
+                              step.prerequisites.length > 0 && (
+                                <div>
+                                  <h6 className="text-sm font-medium text-gray-700 mb-2">
+                                    Prerequisites:
+                                  </h6>
+                                  <ul className="text-sm text-gray-600 list-disc list-inside space-y-1">
+                                    {step.prerequisites.map(
+                                      (prereq, prereqIndex) => (
+                                        <li key={prereqIndex}>{prereq}</li>
+                                      )
+                                    )}
+                                  </ul>
+                                </div>
+                              )}
+                          </Card.Content>
+                        </Card>
                       ))
                     ) : (
-                      <p className="text-sm text-gray-500">
-                        No steps available
-                      </p>
+                      <Card variant="outline">
+                        <Card.Content>
+                          <p className="text-gray-500 text-center py-4">
+                            No steps available
+                          </p>
+                        </Card.Content>
+                      </Card>
                     )}
                   </div>
-                </div>
-              </div>
+                </Card.Content>
+              </Card>
             ))
           ) : (
-            <p className="text-gray-500">No learning phases available</p>
+            <Card variant="outline">
+              <Card.Content>
+                <p className="text-gray-500 text-center py-8">
+                  No learning phases available
+                </p>
+              </Card.Content>
+            </Card>
           )}
         </div>
       </div>
@@ -294,106 +338,104 @@ const SavedRoadmaps = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <div className="flex items-center space-x-4 mb-4">
-          <Link
-            to="/dashboard"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Back to Dashboard</span>
-          </Link>
-        </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Saved Roadmaps
-        </h1>
-        <p className="text-gray-600">
-          View and manage your saved learning roadmaps.
-        </p>
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" strokeWidth={2} />
+          <span>Back to Dashboard</span>
+        </Link>
+
+        <Card variant="default" className="mb-6">
+          <Card.Header>
+            <Card.Title className="text-3xl">Saved Roadmaps</Card.Title>
+            <Card.Description>
+              View and manage your saved learning roadmaps.
+            </Card.Description>
+          </Card.Header>
+        </Card>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-          <div className="flex items-center space-x-2">
-            <AlertCircle className="w-5 h-5 text-red-600" />
-            <span className="text-red-800">{error}</span>
-          </div>
-        </div>
+        <Card variant="outline" className="mb-6 border-red-200 bg-red-50">
+          <Card.Content>
+            <div className="flex items-center space-x-2">
+              <AlertCircle className="w-5 h-5 text-red-600" />
+              <span className="text-red-800">{error}</span>
+            </div>
+          </Card.Content>
+        </Card>
       )}
 
       {roadmaps.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <BookOpen className="w-8 h-8 text-gray-400" />
-          </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            No saved roadmaps yet
-          </h3>
-          <p className="text-gray-600 mb-6">
-            Generate and save detailed roadmaps to view them here.
-          </p>
-          <Link
-            to="/results"
-            className="inline-flex items-center space-x-2 bg-primary-500 text-white px-5 py-2.5 rounded-lg hover:bg-primary-600"
-          >
-            <span>Browse Careers</span>
-          </Link>
-        </div>
+        <Card variant="default">
+          <Card.Content>
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BookOpen className="w-8 h-8 text-gray-400" />
+              </div>
+              <Card.Title className="mb-2">No saved roadmaps yet</Card.Title>
+              <Card.Description className="mb-6">
+                Generate and save detailed roadmaps to view them here.
+              </Card.Description>
+              <Button as={Link} to="/results" variant="primary" size="lg">
+                Browse Careers
+              </Button>
+            </div>
+          </Card.Content>
+        </Card>
       ) : (
         <div className="space-y-4">
           {roadmaps.map((roadmap) => (
-            <div
-              key={roadmap.id}
-              className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {roadmap.title}
-                  </h3>
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <div className="flex items-center space-x-1">
-                      <Calendar className="w-4 h-4" />
-                      <span>Saved {formatDate(roadmap.createdAt)}</span>
+            <Card key={roadmap.id} variant="interactive">
+              <Card.Content>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <Card.Title className="text-lg mb-2">
+                      {roadmap.title}
+                    </Card.Title>
+                    <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <div className="flex items-center space-x-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>Saved {formatDate(roadmap.createdAt)}</span>
+                      </div>
                     </div>
                   </div>
+                  <div className="flex items-center space-x-3">
+                    <Button
+                      onClick={() => viewRoadmap(roadmap)}
+                      variant="outline"
+                      size="sm"
+                      icon={<Eye size={16} />}
+                    >
+                      View
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        downloadRoadmapPDF(roadmap.id, roadmap.title)
+                      }
+                      disabled={downloadingId === roadmap.id}
+                      loading={downloadingId === roadmap.id}
+                      variant="success"
+                      size="sm"
+                      icon={<Download size={16} />}
+                    >
+                      Download PDF
+                    </Button>
+                    <Button
+                      onClick={() => deleteRoadmap(roadmap.id)}
+                      disabled={deletingId === roadmap.id}
+                      loading={deletingId === roadmap.id}
+                      variant="danger"
+                      size="sm"
+                      icon={<Trash2 size={16} />}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => viewRoadmap(roadmap)}
-                    className="inline-flex items-center space-x-2 bg-blue-500 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-600 transition-colors"
-                  >
-                    <Eye className="w-4 h-4" />
-                    <span>View</span>
-                  </button>
-                  <button
-                    onClick={() =>
-                      downloadRoadmapPDF(roadmap.id, roadmap.title)
-                    }
-                    disabled={downloadingId === roadmap.id}
-                    className="inline-flex items-center space-x-2 bg-green-500 text-white px-3 py-1.5 rounded text-sm hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    {downloadingId === roadmap.id ? (
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    ) : (
-                      <Download className="w-4 h-4" />
-                    )}
-                    <span>Download PDF</span>
-                  </button>
-                  <button
-                    onClick={() => deleteRoadmap(roadmap.id)}
-                    disabled={deletingId === roadmap.id}
-                    className="inline-flex items-center space-x-2 bg-red-500 text-white px-3 py-1.5 rounded text-sm hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    {deletingId === roadmap.id ? (
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    ) : (
-                      <Trash2 className="w-4 h-4" />
-                    )}
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+              </Card.Content>
+            </Card>
           ))}
         </div>
       )}
@@ -401,14 +443,14 @@ const SavedRoadmaps = () => {
       {/* View Roadmap Modal */}
       {viewingRoadmap && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-xl">
               <h2 className="text-xl font-semibold text-gray-900">
                 {viewingRoadmap.title}
               </h2>
               <button
                 onClick={closeView}
-                className="p-2 hover:bg-gray-100 rounded-lg"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

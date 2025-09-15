@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { reportAPI } from "../services/api";
+import Card from "../components/Card";
+import Button from "../components/Button";
 import { BarChart, ArrowRight, Download, Brain } from "lucide-react";
 
 const Results = () => {
@@ -124,97 +126,121 @@ const Results = () => {
       </div>
 
       {/* Personality Profile Section */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-          <Brain className="w-5 h-5 mr-2 text-primary-500" />
-          Your Personality Profile
-        </h2>
+      <Card variant="elevated" className="mb-8">
+        <Card.Header>
+          <div className="flex items-center space-x-3">
+            <Brain className="w-6 h-6 text-primary-500" strokeWidth={2} />
+            <Card.Title>Your Personality Profile</Card.Title>
+          </div>
+        </Card.Header>
 
-        <div className="space-y-4">
-          {traits.map((trait) => (
-            <div key={trait.name} className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700 w-32">
-                {trait.name}
-              </span>
-              <div className="flex-1 ml-4">
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
+        <Card.Content>
+          <div className="space-y-6">
+            {traits.map((trait) => (
+              <div key={trait.name} className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-700">
+                    {trait.name}
+                  </span>
+                  <span className="text-sm font-semibold text-gray-900">
+                    {Math.round(trait.value * 100)}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
                   <div
-                    className={`${trait.color} h-2.5 rounded-full`}
+                    className={`${trait.color} h-3 rounded-full transition-all duration-1000 ease-out`}
                     style={{ width: `${trait.value * 100}%` }}
                   ></div>
                 </div>
               </div>
-              <span className="text-sm font-medium text-gray-700 w-12 text-right">
-                {Math.round(trait.value * 100)}%
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <h3 className="text-sm font-medium text-gray-900 mb-2">
-            Your Holland Codes
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {report.inferredHollandCodes.map((code) => (
-              <span
-                key={code}
-                className="px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full"
-              >
-                {code}
-              </span>
             ))}
           </div>
-        </div>
-      </div>
+
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <h3 className="text-sm font-medium text-gray-900 mb-3">
+              Your Holland Codes
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {report.inferredHollandCodes.map((code) => (
+                <span
+                  key={code}
+                  className="px-4 py-2 bg-primary-100 text-primary-700 text-sm rounded-full border border-primary-200 font-medium"
+                >
+                  {code}
+                </span>
+              ))}
+            </div>
+          </div>
+        </Card.Content>
+      </Card>
 
       {/* Career Recommendations Section */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">
-          Your Career Recommendations
-        </h2>
+      <Card variant="default">
+        <Card.Header>
+          <Card.Title>Career Recommendations</Card.Title>
+          <Card.Description>
+            Based on your personality traits and Holland codes
+          </Card.Description>
+        </Card.Header>
 
-        <div className="space-y-6">
-          {report.recommendations.map((recommendation, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                {recommendation.title}
-              </h3>
-
-              <div className="mb-4">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">
-                  Why it's a good fit:
-                </h4>
-                <p className="text-gray-600 text-sm">{recommendation.reason}</p>
-              </div>
-
-              <div className="mb-4">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">
-                  Key skills to develop:
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {recommendation.skillGaps.map((skill, skillIndex) => (
-                    <span
-                      key={skillIndex}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <Link
-                to={`/roadmap/${recommendation.careerId}`}
-                className="inline-flex items-center space-x-2 text-primary-600 hover:text-primary-700 font-medium"
+        <Card.Content>
+          <div className="space-y-6">
+            {report.recommendations.map((recommendation, index) => (
+              <Card
+                key={index}
+                variant="interactive"
+                className="border-gray-200"
               >
-                <span>View detailed roadmap</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          ))}
-        </div>
-      </div>
+                <Card.Header>
+                  <Card.Title className="text-lg">
+                    {recommendation.title}
+                  </Card.Title>
+                </Card.Header>
+
+                <Card.Content>
+                  <div className="mb-4">
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">
+                      Why it's a good fit:
+                    </h4>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {recommendation.reason}
+                    </p>
+                  </div>
+
+                  <div className="mb-6">
+                    <h4 className="text-sm font-medium text-gray-700 mb-3">
+                      Key skills to develop:
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {recommendation.skillGaps.map((skill, skillIndex) => (
+                        <span
+                          key={skillIndex}
+                          className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full border border-gray-200"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <Button
+                      as={Link}
+                      to={`/roadmap/${recommendation.careerId}`}
+                      variant="primary"
+                      size="sm"
+                      icon={<ArrowRight size={16} />}
+                      iconPosition="right"
+                    >
+                      View detailed roadmap
+                    </Button>
+                  </div>
+                </Card.Content>
+              </Card>
+            ))}
+          </div>
+        </Card.Content>
+      </Card>
     </div>
   );
 };

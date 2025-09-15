@@ -10,6 +10,7 @@ const Button = ({
   className = "",
   icon,
   iconPosition = "left",
+  as,
   ...props
 }) => {
   const baseClasses =
@@ -44,8 +45,10 @@ const Button = ({
     ${className}
   `.trim();
 
+  const Component = as || "button";
+
   return (
-    <button className={classes} disabled={disabled || loading} {...props}>
+    <Component className={classes} disabled={disabled || loading} {...props}>
       {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
 
       {!loading && icon && iconPosition === "left" && (
@@ -57,7 +60,7 @@ const Button = ({
       {!loading && icon && iconPosition === "right" && (
         <span className="ml-2">{icon}</span>
       )}
-    </button>
+    </Component>
   );
 };
 

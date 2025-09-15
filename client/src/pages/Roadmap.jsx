@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { careerAPI, roadmapAPI } from "../services/api";
+import Card from "../components/Card";
+import Button from "../components/Button";
 import {
   ArrowLeft,
   BookOpen,
@@ -217,48 +219,60 @@ const Roadmap = () => {
     if (!career.detailedRoadmap) return null;
 
     return (
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Summary Section */}
         {career.detailedRoadmap.totalDuration && (
-          <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <Calendar className="w-6 h-6 text-blue-600" strokeWidth={2} />
-              <h3 className="text-lg font-semibold text-blue-900">
-                Learning Timeline
-              </h3>
-            </div>
-            <p className="text-blue-700 text-lg">
-              <strong>Total Duration:</strong>{" "}
-              {career.detailedRoadmap.totalDuration}
-            </p>
-          </div>
+          <Card variant="gradient" className="border-primary-200">
+            <Card.Content>
+              <div className="flex items-center space-x-3 mb-3">
+                <Calendar
+                  className="w-6 h-6 text-primary-600"
+                  strokeWidth={2}
+                />
+                <h3 className="text-lg font-semibold text-primary-900">
+                  Learning Timeline
+                </h3>
+              </div>
+              <p className="text-primary-700 text-lg font-medium">
+                <strong>Total Duration:</strong>{" "}
+                {career.detailedRoadmap.totalDuration}
+              </p>
+            </Card.Content>
+          </Card>
         )}
 
         {/* Key Milestones */}
         {career.detailedRoadmap.keyMilestones &&
           career.detailedRoadmap.keyMilestones.length > 0 && (
-            <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
-              <div className="flex items-center space-x-3 mb-4">
-                <Award className="w-6 h-6 text-purple-600" strokeWidth={2} />
-                <h3 className="text-lg font-semibold text-purple-900">
-                  Key Milestones
-                </h3>
-              </div>
-              <div className="space-y-2">
-                {career.detailedRoadmap.keyMilestones.map(
-                  (milestone, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <div className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
-                        {milestone.atPhase}
+            <Card variant="default">
+              <Card.Header>
+                <div className="flex items-center space-x-3">
+                  <Award
+                    className="w-6 h-6 text-secondary-600"
+                    strokeWidth={2}
+                  />
+                  <Card.Title>Key Milestones</Card.Title>
+                </div>
+              </Card.Header>
+              <Card.Content>
+                <div className="space-y-3">
+                  {career.detailedRoadmap.keyMilestones.map(
+                    (milestone, index) => (
+                      <div key={index} className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-secondary-100 border border-secondary-200 rounded-full flex items-center justify-center">
+                          <span className="text-sm font-medium text-secondary-700">
+                            {milestone.atPhase}
+                          </span>
+                        </div>
+                        <span className="text-gray-700 font-medium">
+                          {milestone.milestone}
+                        </span>
                       </div>
-                      <span className="text-purple-700">
-                        {milestone.milestone}
-                      </span>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
+                    )
+                  )}
+                </div>
+              </Card.Content>
+            </Card>
           )}
 
         {/* Learning Phases */}
@@ -268,11 +282,12 @@ const Roadmap = () => {
           </h2>
 
           {career.detailedRoadmap.phases.map((phase, phaseIndex) => (
-            <div
+            <Card
               key={phaseIndex}
-              className="border border-gray-200 rounded-xl overflow-hidden"
+              variant="elevated"
+              className="overflow-hidden"
             >
-              <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6">
+              <div className="bg-gradient-to-r from-primary-500 to-secondary-600 text-white p-6 rounded-xl mb-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-xl font-bold mb-2">
@@ -280,16 +295,18 @@ const Roadmap = () => {
                         ? phase.title
                         : `Phase ${phaseIndex + 1}: ${phase.title}`}
                     </h3>
-                    <p className="text-blue-100 mb-2">{phase.objective}</p>
+                    <p className="text-primary-100 mb-2">{phase.objective}</p>
                     {phase.duration && (
                       <div className="flex items-center space-x-2">
                         <Clock className="w-4 h-4" strokeWidth={2} />
-                        <span className="text-sm">{phase.duration}</span>
+                        <span className="text-sm font-medium">
+                          {phase.duration}
+                        </span>
                       </div>
                     )}
                   </div>
                   <div className="text-right">
-                    <div className="bg-black bg-opacity-30 rounded-lg px-3 py-1">
+                    <div className="bg-black bg-opacity-30 rounded-lg px-3 py-1 backdrop-blur-sm">
                       <span className="text-sm font-medium text-white">
                         {phase.steps.length} steps
                       </span>
@@ -298,97 +315,104 @@ const Roadmap = () => {
                 </div>
               </div>
 
-              <div className="p-6 space-y-4">
+              <Card.Content className="space-y-4">
                 {phase.steps.map((step, stepIndex) => (
-                  <div
+                  <Card
                     key={stepIndex}
-                    className="border border-gray-100 rounded-lg p-4 hover:shadow-md transition-shadow"
+                    variant="interactive"
+                    className="border-gray-100"
                   >
-                    <div className="flex items-start space-x-4">
-                      <div className="flex-shrink-0">
-                        <div className="w-8 h-8 bg-blue-100 border border-blue-200 rounded-full flex items-center justify-center">
-                          <span className="text-sm font-medium text-blue-700">
-                            {stepIndex + 1}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-2">
-                          <h4 className="text-lg font-semibold text-gray-900">
-                            {step.title}
-                          </h4>
-                          <div className="flex items-center space-x-2">
-                            {step.estimatedTime && (
-                              <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                                {step.estimatedTime}
-                              </span>
-                            )}
-                            {step.difficulty && (
-                              <span
-                                className={`text-xs font-medium px-2 py-1 rounded border ${getDifficultyColor(
-                                  step.difficulty
-                                )}`}
-                              >
-                                {step.difficulty}
-                              </span>
-                            )}
+                    <Card.Content>
+                      <div className="flex items-start space-x-4">
+                        <div className="flex-shrink-0">
+                          <div className="w-10 h-10 bg-primary-100 border border-primary-200 rounded-full flex items-center justify-center">
+                            <span className="text-sm font-medium text-primary-700">
+                              {stepIndex + 1}
+                            </span>
                           </div>
                         </div>
 
-                        <p className="text-gray-600 mb-3">{step.description}</p>
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-3">
+                            <h4 className="text-lg font-semibold text-gray-900">
+                              {step.title}
+                            </h4>
+                            <div className="flex items-center space-x-2">
+                              {step.estimatedTime && (
+                                <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                                  {step.estimatedTime}
+                                </span>
+                              )}
+                              {step.difficulty && (
+                                <span
+                                  className={`text-xs font-medium px-3 py-1 rounded-full border ${getDifficultyColor(
+                                    step.difficulty
+                                  )}`}
+                                >
+                                  {step.difficulty}
+                                </span>
+                              )}
+                            </div>
+                          </div>
 
-                        {step.prerequisites &&
-                          step.prerequisites.length > 0 && (
-                            <div className="mb-3">
-                              <h5 className="text-sm font-medium text-gray-700 mb-1">
-                                Prerequisites:
+                          <p className="text-gray-600 mb-4">
+                            {step.description}
+                          </p>
+
+                          {step.prerequisites &&
+                            step.prerequisites.length > 0 && (
+                              <div className="mb-4">
+                                <h5 className="text-sm font-medium text-gray-700 mb-2">
+                                  Prerequisites:
+                                </h5>
+                                <ul className="text-sm text-gray-600 list-disc list-inside space-y-1">
+                                  {step.prerequisites.map(
+                                    (prereq, prereqIndex) => (
+                                      <li key={prereqIndex}>{prereq}</li>
+                                    )
+                                  )}
+                                </ul>
+                              </div>
+                            )}
+
+                          {step.resources && step.resources.length > 0 && (
+                            <div>
+                              <h5 className="text-sm font-medium text-gray-700 mb-3">
+                                Recommended Resources:
                               </h5>
-                              <ul className="text-sm text-gray-600 list-disc list-inside">
-                                {step.prerequisites.map(
-                                  (prereq, prereqIndex) => (
-                                    <li key={prereqIndex}>{prereq}</li>
+                              <div className="flex flex-wrap gap-2">
+                                {step.resources.map(
+                                  (resource, resourceIndex) => (
+                                    <a
+                                      key={resourceIndex}
+                                      href={
+                                        resource.url ||
+                                        `https://www.google.com/search?q=${encodeURIComponent(
+                                          resource.title || resource
+                                        )}`
+                                      }
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center space-x-2 text-sm bg-secondary-50 text-secondary-700 px-3 py-2 rounded-full border border-secondary-200 hover:bg-secondary-100 transition-colors"
+                                    >
+                                      <ExternalLink
+                                        className="w-3 h-3"
+                                        strokeWidth={2}
+                                      />
+                                      <span>{resource.title || resource}</span>
+                                    </a>
                                   )
                                 )}
-                              </ul>
+                              </div>
                             </div>
                           )}
-
-                        {step.resources && step.resources.length > 0 && (
-                          <div>
-                            <h5 className="text-sm font-medium text-gray-700 mb-2">
-                              Recommended Resources:
-                            </h5>
-                            <div className="flex flex-wrap gap-2">
-                              {step.resources.map((resource, resourceIndex) => (
-                                <a
-                                  key={resourceIndex}
-                                  href={
-                                    resource.url ||
-                                    `https://www.google.com/search?q=${encodeURIComponent(
-                                      resource.title || resource
-                                    )}`
-                                  }
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center space-x-1 text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full border border-green-200 hover:bg-green-100 transition-colors"
-                                >
-                                  <ExternalLink
-                                    className="w-3 h-3"
-                                    strokeWidth={2}
-                                  />
-                                  <span>{resource.title || resource}</span>
-                                </a>
-                              ))}
-                            </div>
-                          </div>
-                        )}
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    </Card.Content>
+                  </Card>
                 ))}
-              </div>
-            </div>
+              </Card.Content>
+            </Card>
           ))}
         </div>
       </div>
@@ -397,32 +421,33 @@ const Roadmap = () => {
 
   const renderBasicRoadmap = () => {
     return (
-      <div className="space-y-8">
+      <div className="space-y-6">
         {skillCategories.map((category, index) => (
-          <div key={index} className="border-l-4 border-gray-200 pl-6">
-            <div className="flex items-center space-x-2 mb-4">
-              {category.icon}
-              <h3 className="text-lg font-medium text-gray-900">
-                {category.title}
-              </h3>
-            </div>
-
-            <div className="grid gap-3">
-              {category.skills.map((skill, skillIndex) => (
-                <div
-                  key={skillIndex}
-                  className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg"
-                >
-                  <div className="w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-xs font-medium text-gray-600">
-                      {skillIndex + 1}
-                    </span>
+          <Card key={index} variant="default">
+            <Card.Header>
+              <div className="flex items-center space-x-3">
+                {category.icon}
+                <Card.Title>{category.title}</Card.Title>
+              </div>
+            </Card.Header>
+            <Card.Content>
+              <div className="grid gap-3">
+                {category.skills.map((skill, skillIndex) => (
+                  <div
+                    key={skillIndex}
+                    className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="w-8 h-8 bg-white border border-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-sm font-medium text-gray-600">
+                        {skillIndex + 1}
+                      </span>
+                    </div>
+                    <span className="text-gray-700 font-medium">{skill}</span>
                   </div>
-                  <span className="text-gray-700">{skill}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+                ))}
+              </div>
+            </Card.Content>
+          </Card>
         ))}
       </div>
     );
@@ -432,40 +457,47 @@ const Roadmap = () => {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <Link
         to="/results"
-        className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-800 mb-6"
+        className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" strokeWidth={2} />
         <span>Back to Results</span>
       </Link>
 
-      <div className="bg-white rounded-2xl p-6 shadow-sm mb-8">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {career.title} Roadmap
-            </h1>
-            <p className="text-gray-600">{career.description}</p>
-          </div>
+      <Card variant="default" className="mb-8">
+        <Card.Header>
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between">
+            <div className="flex-1">
+              <Card.Title className="text-3xl mb-2">
+                {career.title} Roadmap
+              </Card.Title>
+              <Card.Description className="text-lg">
+                {career.description}
+              </Card.Description>
+            </div>
 
-          {career.averageSalary &&
-            career.averageSalary.min &&
-            career.averageSalary.max && (
-              <div className="bg-blue-50 rounded-lg p-4 mt-4 md:mt-0">
-                <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4 text-blue-500" strokeWidth={2} />
-                  <span className="text-sm font-medium text-blue-700">
-                    Average Salary
-                  </span>
+            {career.averageSalary &&
+              career.averageSalary.min &&
+              career.averageSalary.max && (
+                <div className="bg-primary-50 rounded-lg p-4 mt-4 md:mt-0 md:ml-6 border border-primary-200">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Clock
+                      className="w-4 h-4 text-primary-500"
+                      strokeWidth={2}
+                    />
+                    <span className="text-sm font-medium text-primary-700">
+                      Average Salary
+                    </span>
+                  </div>
+                  <p className="text-lg font-semibold text-primary-900">
+                    ${career.averageSalary.min.toLocaleString()} - $
+                    {career.averageSalary.max.toLocaleString()}
+                  </p>
                 </div>
-                <p className="text-lg font-semibold text-blue-900">
-                  ${career.averageSalary.min.toLocaleString()} - $
-                  {career.averageSalary.max.toLocaleString()}
-                </p>
-              </div>
-            )}
-        </div>
+              )}
+          </div>
+        </Card.Header>
 
-        <div className="prose max-w-none">
+        <Card.Content>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900">
               {career.detailedRoadmap
@@ -475,45 +507,38 @@ const Roadmap = () => {
             <div className="flex items-center space-x-3">
               {career.detailedRoadmap && (
                 <>
-                  <button
+                  <Button
                     onClick={saveRoadmap}
                     disabled={saving}
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                    loading={saving}
+                    variant="success"
+                    size="sm"
                   >
-                    {saving && (
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    )}
-                    <span>{saving ? "Saving..." : "Save Roadmap"}</span>
-                  </button>
-                  <button
+                    {saving ? "Saving..." : "Save Roadmap"}
+                  </Button>
+                  <Button
                     onClick={downloadRoadmapPDF}
                     disabled={downloading}
-                    className="bg-purple-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                    loading={downloading}
+                    variant="outline"
+                    size="sm"
                   >
-                    {downloading && (
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    )}
-                    <span>
-                      {downloading ? "Downloading..." : "Download PDF"}
-                    </span>
-                  </button>
+                    {downloading ? "Downloading..." : "Download PDF"}
+                  </Button>
                 </>
               )}
               {!career.detailedRoadmap && (
-                <button
+                <Button
                   onClick={fetchDetailedRoadmap}
                   disabled={detailedLoading}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                  loading={detailedLoading}
+                  variant="primary"
+                  size="sm"
                 >
-                  {detailedLoading && (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  )}
-                  <span>
-                    {detailedLoading
-                      ? "Generating..."
-                      : "Get AI-Powered Detailed Roadmap"}
-                  </span>
-                </button>
+                  {detailedLoading
+                    ? "Generating..."
+                    : "Get AI-Powered Detailed Roadmap"}
+                </Button>
               )}
             </div>
           </div>
@@ -540,8 +565,8 @@ const Roadmap = () => {
           {career.detailedRoadmap
             ? renderDetailedRoadmap()
             : renderBasicRoadmap()}
-        </div>
-      </div>
+        </Card.Content>
+      </Card>
     </div>
   );
 };
